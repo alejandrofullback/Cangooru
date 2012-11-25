@@ -1,0 +1,129 @@
+﻿@model  CangooruMVC.Models.UserLocations
+@{
+    var grid = new WebGrid(source: Model.Locations, ajaxUpdateContainerId: "locationsGrid", canPage: false, canSort: false, rowsPerPage: 5);
+    var gridColumns = new List<WebGridColumn>();
+    if (Model.ShowEditColumns)
+    {
+        gridColumns.Add(grid.Column(header: "Retirada", format: (item) => Html.CheckBox("Retirada", false, new { @class = "retiradaChk" })));
+        gridColumns.Add(grid.Column(header: "Entrega", format: (item) => Html.CheckBox("Entrega", false, new { @class = "entregaChk" })));
+    }
+    gridColumns.Add(grid.Column("CEP", "CEP", style: "textCol"));
+    gridColumns.Add(grid.Column("UF", "UF", style: "textCol"));
+    gridColumns.Add(grid.Column("City", "Cidade", style: "textCol"));
+    gridColumns.Add(grid.Column("Neighborhood", "Bairro", style: "textCol"));
+    gridColumns.Add(grid.Column("Address", "Endereço", style: "textCol"));
+    gridColumns.Add(grid.Column("More", "Complemento", style: "textCol"));
+    gridColumns.Add(grid.Column("", header: "Ações", format: @<text>
+    @Html.ActionLink("Editar", "Edit", "Locations", new { locationId = item.LocationId }, new { @class = "editLocation" })
+    |
+    @Html.ActionLink("Deletar", "Delete", "Locations", new { locationId = item.LocationId }, new { @class = "deleteLocation" })
+    </text>));
+     
+}
+<div id="locationsWebGrid" style="padding: 10px;" class="locationsWebGrid">
+    @grid.GetHtml(
+                    tableStyle: "webgrid",
+                    headerStyle: "webgrid-header",
+                    footerStyle: "webgrid-footer",
+                    alternatingRowStyle: "webgrid-alternating-row",
+                    selectedRowStyle: "webgrid-selected-row",
+                    rowStyle: "webgrid-row-style",
+                    columns: grid.Columns(gridColumns.ToArray()
+))
+</div>
+<div id="dialog-edit">
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.deleteLocation')
+			.click(function (event) {
+			    $("#dialog-confirm-text").html("Realmente deseja deletar a localidade?");
+			    $("#dialog-confirm").data("link", this).dialog("open");
+			    return false;
+			});
+    });
+
+    $(function () {
+        $('.editLocation')
+			.click(function (event) {
+			    			    $.ajax({
+			    			        url: $(this).prop("href"),
+			    			        type: 'GET',
+			    			        success: function (data) {
+	                    	                $("#dialog-edit").html(data);
+			    				            $("#dialog-edit").data("link", this).dialog("open");
+			    			        },
+			    			        dataType: 'html'
+			    			    });
+			    return false;
+			});
+    });
+
+    $(function () {
+        $('#dialog-confirm').dialog({
+            resizable: false,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Deletar": function () {
+                    $.ajax({
+                        url: $(this).data("link").href,
+                        type: 'POST',
+                        success: function (data) {
+                            UpdateGridView();
+                        },
+                        dataType: 'json'
+                    });
+                    $(this).dialog("close");
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+
+    $(function () {
+        $('#dialog-edit').dialog({
+            resizable: false,
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Guardar": function () {
+                    var dlg = $(this);
+                    var form = $('form', dlg);
+                    if (form.validate().form() == true) {
+                        $.post(form.attr('action'), form.serialize(), function (data) {
+                            if (data.Status == 0) {
+                                UpdateGridView();
+                                $("#dialog-edit").dialog("close");
+                            }
+                            else {
+                                $("#dialog-text").html("Não foi posivel editar a localidade");
+                                $("#dialog-message").dialog("open");
+                            }
+                        });
+                    }
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+
+    $(".retiradaChk").click(function () {
+        if ($(this).prop("checked") == true) {
+            $(".retiradaChk").prop("checked", false);
+            $(this).closest("tr").find("input[type=checkbox]").prop("checked", false);
+            $(this).prop("checked", true);
+        }
+    });
+
+    $('.entregaChk').click(function () {
+        if ($(this).prop("checked") == true) {
+            $(this).closest("tr").find("input[type=checkbox]").prop("checked", false);
+            $(this).prop("checked", true);
+        }
+    });
+</script>

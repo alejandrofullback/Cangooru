@@ -1,0 +1,106 @@
+﻿@model  CangooruMVC.Models.CreateOrderModel
+<div style="font-size: 20px; letter-spacing: -1px; padding: 10px; font-weight: bold">
+    Nova Entrega
+</div>
+<div>
+    @Html.ValidationSummary(true, "Falha na criação do Pedido. Por favor, verifique os erros e tente novamente.")
+</div>
+<div>
+    <div>
+        <fieldset style="width: 97%">
+            <legend>Endereços</legend>
+            <div>
+                @{Html.RenderAction("Index", "Locations", new { showEditColumns = true });}
+            </div>
+        </fieldset>
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(m => m.Comments)
+    </div>
+    <div class="editor-field">
+        @Html.TextAreaFor(m => m.Comments, new { @class = "comments-field", @id = "comments" })
+    </div>
+    <div>
+        <div class="editor-label">
+            @Html.Label("Dimensões")
+        </div>
+        <div>
+            <div>
+                <div>
+                    <div style="float: left; padding-right: 5px">
+                        @Html.LabelFor(m => m.Width)
+                    </div>
+                    <div style="float: left; padding-right: 5px">
+                        @Html.TextBoxFor(m => m.Width, new { @class = "shortTextBox" })
+                        @Html.ValidationMessageFor(m => m.Width)
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div style="float: left; padding-right: 5px">
+                        @Html.LabelFor(m => m.Height)
+                    </div>
+                    <div style="float: left; padding-right: 5px">
+                        @Html.TextBoxFor(m => m.Height, new { @class = "shortTextBox" })
+                        @Html.ValidationMessageFor(m => m.Height)
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div style="float: left; padding-right: 5px; vertical-align: middle">
+                        @Html.LabelFor(m => m.Depth)
+                    </div>
+                    <div>
+                        @Html.TextBoxFor(m => m.Depth, new { @class = "shortTextBox" })
+                        @Html.ValidationMessageFor(m => m.Depth)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            @Html.LabelFor(m => m.Weight)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(m => m.Weight, new { @class = "shortTextBox" })
+        </div>
+    </div>
+    <div>
+        <div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.DeliveryDateTime)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.DeliveryDateTime)
+                @Html.ValidationMessageFor(m => m.DeliveryDateTime)
+            </div>
+        </div>
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(m => m.DeliveryType)
+    </div>
+    <div class="editor-field">
+        @Html.DropDownListFor(m => m.DeliveryType, (List<SelectListItem>)ViewBag.DeliveryType)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(m => m.ExpressDelivery)
+        @Html.CheckBoxFor(m => m.ExpressDelivery)
+        @Html.ValidationMessageFor(m => m.ExpressDelivery)
+    </div>
+</div>
+<p class="p_btn">
+    <input type="submit" value="Calcular Custo" class="form_btn" />
+</p>
+<script type="text/javascript">
+
+    $('#DeliveryDateTime').datetimepicker(
+    {
+        hourMin: 8,
+        hourMax: 19,
+        minDate: new Date()
+    });
+    $('#comments').jqEasyCounter({ 'maxChars': 500, 'maxCharsWarning': 250 }); 
+</script>

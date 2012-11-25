@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery-ui-1.8.21.custom.css")" rel="stylesheet" type="text/css" />
+    <link type="image/x-icon" href="@Url.Content("~/Content/Images/logo_cangooru.png")" rel="shortcut icon"/>
+    <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+    @using CangooruMVC.Views
+</head>
+<body>
+    @*Header and Navigation*@
+    <div id="mainDiv">
+        <header class="header">
+            <div id="headerDiv">
+                <div class="header_logo">
+                    <a href="@Url.Action("Index", "Home")">
+                        <img src="@Url.Content("~/Content/Images/logo_cangooru150.png")" alt="Home" /></a>
+                </div>
+                <div class="header_login">
+                    @Html.Partial("_LogOnPartial")
+                </div>
+                <nav>
+                    <ul>
+                        <li>@Html.ActionLink("Fale Conosco", "About", "Home")</li>
+                        <li>@Html.ActionLink("Como Funciona", "About", "Home")</li>
+                        <li>@Html.ActionLink("Cangooru", "Index", "Home")</li>
+                    </ul>
+                </nav>
+            </div>
+            <div id="headerSecondaryDiv">
+                @if (Request.IsAuthenticated)
+                {
+                    <text><strong style="color: #FFFFFF; font-size: large">@User.Identity.Name</strong>!
+                    [ @Html.ActionLink("Sair", "LogOff", "Account", new object(), new { style = "color:#f08707;font-size:large" })]</text> 
+                }
+                else
+                {
+                    <img src="@Url.Content("~/Content/Images/headerPresentation.png")" alt="Home" />
+                }
+            </div>
+        </header>
+        @*Body*@
+        <div class="page">
+            <div class="main">
+                <section id="MainContent">
+                    @RenderBody()
+                </section>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="footer">
+            <footer>
+                <table>
+                    <tr>
+                        <td style="height: 30px; text-align: left;" colspan="10">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="85px">
+                        </td>
+                        <td width="360px">
+                            <img src="@Url.Content("~/Content/Images/Logo branco.png")" alt="Home" />
+                        </td>
+                        <td width="80px">
+                            @Html.ActionLink("Cangooru", "Index", "Home")
+                        </td>
+                        <td width="1px">
+                            @Html.Label("|")
+                        </td>
+                        <td width="115px">
+                            @Html.ActionLink("Como Funciona", "About", "Home")
+                        </td>
+                        <td width="1px">
+                            @Html.Label("|")
+                        </td>
+                        <td width="175px">
+                            @Html.ActionLink("Fale Conosco", "About", "Home")
+                        </td>
+                        <td width="1px">
+                            @Html.Label("MÍDIAS SOCIAIS: ")
+                        </td>
+                        <td width="30px" style="text-align: left;">
+                            <img src="@Url.Content("~/Content/Images/facebook.png")" alt="" />
+                        </td>
+                        <td width="1px">
+                        </td>
+                        <td width="auto" style="text-align: left;">
+                            <img src="@Url.Content("~/Content/Images/twitter.png")" alt="" />
+                        </td>
+                    </tr>
+                </table>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

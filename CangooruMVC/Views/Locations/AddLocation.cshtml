@@ -1,0 +1,100 @@
+﻿@model  CangooruMVC.Models.AddressViewModel
+@using (Html.BeginForm((string)@ViewBag.Action, "Locations"))
+{
+    @Html.HiddenFor(m => m.LocationId)
+    <fieldset>
+        <legend>@ViewBag.Title</legend>
+        <div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.CEP)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.CEP)
+                @Html.ValidationMessageFor(m => m.CEP)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.Street)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Street, new { @readonly = "true" })
+                @Html.ValidationMessageFor(m => m.Street)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.Neighborhood)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Neighborhood, new { @readonly = "true" })
+                @Html.ValidationMessageFor(m => m.Neighborhood)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.City)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.City, new { @readonly = "true" })
+                @Html.ValidationMessageFor(m => m.City)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.Number)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Number)
+                @Html.ValidationMessageFor(m => m.Number)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.More)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.More)
+                @Html.ValidationMessageFor(m => m.More)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.UF)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.UF, new { @readonly = "true" })
+                @Html.ValidationMessageFor(m => m.UF)
+            </div>
+        </div>
+    </fieldset>
+}
+<div id="dialog-message">
+    <span id="dialog-text"></span>
+</div>
+<script type="text/javascript">
+    $("#CEP").mask("99999-999");
+    $("#CEP").change(function () {
+        $.ajax({
+            url: '@Url.Action("GetAddressInfo", "Locations")',
+            type: 'POST',
+            data: { cep: $("#CEP").val() },
+            success: function (data) {
+                if (data.uf != "RJ") {
+                    $("#dialog-text").html("O Cangooru ainda não atende aí, estamos chegando");
+                    $("#dialog-message").dialog("open");
+                }
+                else {
+                    $("#City").val(data.city);
+                    $("#UF").val(data.uf);
+                    $("#Street").val(data.street);
+                    $("#Neighborhood").val(data.neighborhood);
+                }
+            },
+            error: function (data) {
+                $("#dialog-text").html("CEP não encontrado, por favor preencha um CEP valido");
+                $("#dialog-message").dialog("open");
+            },
+            dataType: 'json'
+        });
+    });
+    $(function () {
+        $("#dialog-message").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                Ok: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+</script>

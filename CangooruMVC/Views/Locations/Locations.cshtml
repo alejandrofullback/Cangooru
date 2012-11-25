@@ -1,0 +1,82 @@
+﻿@model  CangooruMVC.Models.UserLocations
+@using Cangooru.Services.Request
+<div>
+    <div class="locationsGrid" id="locationsGrid">
+        @Html.Partial("LocationsGrid", Model)
+    </div>
+    <div style="padding: 10px">
+        <p class="p_btn">
+            <input class="addLocation" type="submit" value="Adicionar" class="form_btn" />
+        </p>
+    </div>
+    <div id="modalDiv" class="modalDiv">
+        @Html.Action("Create", "Locations")
+    </div>
+    <div id="dialog-message">
+        <span id="dialog-text"></span>
+    </div>
+</div>
+<div id="dialog-confirm">
+    <span id="dialog-confirm-text"></span>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#modalDiv").dialog({
+            autoOpen: false,
+            height: 600,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Criar nova localidade": function () {
+                    var dlg = $(this);
+                    var form = $('form', dlg);
+                    if (form.validate().form() == true) {
+                        $.post(form.attr('action'), form.serialize(), function (data) {
+                            if (data.Status == 0) {
+                                UpdateGridView();
+                                $("#modalDiv").dialog("close");
+                            }
+                            else {
+                                $("#dialog-text").html("Não foi posivel adicionar a localidade");
+                                $("#dialog-message").dialog("open");
+                            }
+                        });
+                    }
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $(".addLocation")
+			.click(function () {
+			    $("#modalDiv").dialog("open");
+			});
+    });
+
+    $(function () {
+        $("#dialog-message").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                Ok: function () {
+                    $(this).dialog("close");
+                    $("#modalDiv").dialog("close");
+                }
+            }
+        });
+    });
+
+    function UpdateGridView() {
+        $.ajax({
+            url: '@Url.Action("UpdateLocationsGrid", "Locations")',
+            data: { showEditColumns: "@Model.ShowEditColumns" },
+            type: 'POST',
+            success: function (data) {
+                $(".locationsGrid").html(data);
+            },
+            dataType: 'html'
+        });
+    }
+</script>

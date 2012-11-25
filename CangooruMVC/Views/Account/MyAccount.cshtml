@@ -1,0 +1,60 @@
+﻿@model CangooruMVC.Models.RegisterModel
+<h2>
+    @ViewBag.LegendTitle</h2>
+@using (Html.BeginForm(new { id = "myAccountForm" }))
+{
+    
+   
+    <div>
+        <fieldset>
+            <legend>Detalhes do Usu&aacute;rio</legend>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.Name)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Name)
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.LastName)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.LastName)
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.BirthDate)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.BirthDate)
+                @Html.ValidationMessageFor(m => m.BirthDate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.CPF)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.CPF)
+                @Html.ValidationMessageFor(m => m.CPF)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(m => m.Gender)
+            </div>
+            <div class="editor-field">
+                @Html.Label("Masculino")
+                @Html.RadioButtonFor(m => m.Gender, "Masculino", new { id = "Male" })
+                @Html.Label("Feminino")
+                @Html.RadioButtonFor(m => m.Gender, "Feminino", new { id = "Female" })
+            </div>
+        </fieldset>
+    </div>
+    <p class="p_btn">
+        <input type="submit" value="Vamos lá!" class="form_btn" />
+    </p>
+}
+<div>
+    @Html.ActionLink("Alterar Senha clique Aqui", "ChangePassword", "Account")
+</div>
+<script type="text/javascript">
+    $("#BirthDate").mask("99/99/9999");
+    $("#CPF").mask("999.999.999-99");
+</script>

@@ -1,0 +1,39 @@
+﻿@model CangooruMVC.Models.AddressViewModel
+
+<div>
+    <div class="editor-label">
+        @Html.LabelFor(m => Model.CEP)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(m => Model.CEP)
+        @Html.ValidationMessageFor(m => Model.CEP)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(m => Model.Number)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(m => Model.Number)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(m => Model.More)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(m => Model.More)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(m => Model.City)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(m => Model.City)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(m => Model.UF)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(m => Model.UF)
+    </div>
+</div>
